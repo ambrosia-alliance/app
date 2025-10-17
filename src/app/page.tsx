@@ -1,11 +1,12 @@
-import { prisma } from '@/lib/prisma';
-import SearchPage from './SearchPage';
-import { Article } from '@/types';
+import { prisma } from '../lib/prisma';
+import TherapyPageClient from '../components/TherapyPageClient'; // Client-компонент
 
 export default async function Page() {
-  const initialArticles: Article[] = await prisma.article.findMany({
-    orderBy: { published_date: 'desc' },
+  // Получаем терапии на сервере
+  const therapies = await prisma.therapy.findMany({
+    orderBy: { name: 'asc' },
   });
 
-  return <SearchPage initialArticles={initialArticles} />;
+  // Передаём данные в Client-компонент для отображения и фильтрации
+  return <TherapyPageClient initialTherapies={therapies} />;
 }
