@@ -1,0 +1,34 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Therapy {
+  id          Int        @id @default(autoincrement())
+  name        String
+  imageUrl    String
+  description String
+  pros        String[]
+  cons        String[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  articles    Article[]  // one-to-many relation with Article
+}
+
+model Article {
+  id             Int       @id @default(autoincrement())
+  title          String
+  summary        String
+  abstract       String?
+  authors        String?
+  publishedDate  DateTime?
+  sourceUrl      String
+  journal        String?
+  therapyId      Int
+  therapy        Therapy   @relation(fields: [therapyId], references: [id])
+  createdAt      DateTime  @default(now())
+}
