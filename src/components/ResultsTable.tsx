@@ -7,7 +7,7 @@ interface ArticleProps {
   title: string;
   authors?: string | null;
   publisheddate?: string | null;
-  contenturl: string;
+  sourceurl: string;
 }
 
 interface Props {
@@ -64,7 +64,7 @@ export default function ResultsTable({ articles }: Props) {
               >
                 <td className="p-3 border-b">
                   <a
-                    href={a.contenturl}
+                    href={a.sourceurl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:underline font-medium"
