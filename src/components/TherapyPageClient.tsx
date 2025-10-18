@@ -5,8 +5,17 @@ import TherapyCard from '../components/TherapyCard';
 import SearchBar from '../components/SearchBar';
 import { Therapy } from '@prisma/client';
 
+interface TherapyWithInfo extends Therapy {
+  therapy_info?: {
+    pros?: string;
+    cons?: string;
+    summary?: string;
+    image_url?: string;
+  } | null;
+}
+
 interface Props {
-  initialTherapies: Therapy[];
+  initialTherapies: TherapyWithInfo[];
 }
 
 export default function TherapyPageClient({ initialTherapies }: Props) {
@@ -20,7 +29,7 @@ export default function TherapyPageClient({ initialTherapies }: Props) {
     } else {
       const filtered = initialTherapies.filter((t) =>
         t.name.toLowerCase().includes(q.toLowerCase()) ||
-        t.description.toLowerCase().includes(q.toLowerCase())
+        (t.therapy_info?.summary?.toLowerCase().includes(q.toLowerCase()) ?? false)
       );
       setResults(filtered);
     }
