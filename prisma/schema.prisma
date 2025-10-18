@@ -1,34 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model article {
+  id            String    @id
+  title         String
+  abstract      String?
+  authors       String?
+  createdat     DateTime  @default(now()) @db.Timestamp(6)
+  source        String?
+  sourceurl     String
+  contenturl    String?
+  publisheddate DateTime? @db.Timestamp(6)
+  therapyid     Int
+  processed     Boolean   @default(false)
+  therapy       therapy   @relation(fields: [therapyid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
-model Therapy {
-  id          Int        @id @default(autoincrement())
-  name        String
-  imageUrl    String
-  description String
-  pros        String[]
-  cons        String[]
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  articles    Article[]  // one-to-many relation with Article
+model therapy {
+  id           Int           @id @default(autoincrement())
+  name         String
+  createdat    DateTime      @default(now()) @db.Timestamp(6)
+  updatedat    DateTime      @default(now()) @db.Timestamp(6)
+  article      article[]
+  therapy_info therapy_info? @relation("TherapyInfoRelation")
 }
 
-model Article {
-  id             Int       @id @default(autoincrement())
-  title          String
-  summary        String
-  abstract       String?
-  authors        String?
-  publishedDate  DateTime?
-  sourceUrl      String
-  journal        String?
-  therapyId      Int
-  therapy        Therapy   @relation(fields: [therapyId], references: [id])
-  createdAt      DateTime  @default(now())
+model therapy_info {
+  therapyid Int     @id
+  pros      String?
+  cons      String?
+  summary   String?
+  image_url String?
+  therapy   therapy @relation("TherapyInfoRelation", fields: [therapyid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "therapy_info_fk")
 }

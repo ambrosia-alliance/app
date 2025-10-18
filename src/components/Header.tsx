@@ -6,8 +6,8 @@ import NavBar from './NavBar';
 export default function Header() {
   return (
     <header className="bg-white shadow-md">
-      {/* Верхняя часть: логотип слева */}
-      <div className="max-w-6xl flex items-center p-6">
+      {/* Top section: logo on the left */}
+      <div className="max-w-6xl flex items-center p-6 mx-auto">
         <Link href="/" className="flex items-center space-x-2">
           <img
             src="/images/logo.png"
@@ -18,11 +18,9 @@ export default function Header() {
         </Link>
       </div>
 
-      {/* Нижняя часть: NavBar под шапкой */}
-      <div>
-        <div >
-          <NavBar />
-        </div>
+      {/* Bottom section: NavBar below the header */}
+      <div className="border-t border-gray-200">
+        <NavBar />
       </div>
     </header>
   );
