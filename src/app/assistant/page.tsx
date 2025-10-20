@@ -1,10 +1,12 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 type Msg = { id: string; role: "user" | "assistant"; content: string }
 
@@ -14,7 +16,7 @@ export default function ChatUI() {
             id: "m1",
             role: "assistant",
             content:
-                "Hello. Ask me anything about longevity!",
+                "Ask me anything about longevity!",
         },
     ])
     const [input, setInput] = useState("")
@@ -65,7 +67,7 @@ export default function ChatUI() {
                 {
                     id: crypto.randomUUID(),
                     role: "assistant",
-                    content: "Somthing went wrong. Try again.",
+                    content: "Something went wrong. Try again.",
                 },
             ])
         } finally {
@@ -96,7 +98,29 @@ export default function ChatUI() {
                             )}
                         >
                             <CardContent className="px-5">
-                                <p className="whitespace-pre-wrap break-words">{m.content}</p>
+                                <div className="prose prose-sm dark:prose-invert max-w-none">
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        components={{
+                                            a: ({ node, ...props }) => (
+                                                <a
+                                                    {...props}
+                                                    className="underline"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                />
+                                            ),
+                                            p: ({ node, className, ...props }) => (
+                                                <p
+                                                    {...props}
+                                                    className={cn(className, "last:mb-0")}
+                                                />
+                                            ),
+                                        }}
+                                    >
+                                        {m.content}
+                                    </ReactMarkdown>
+                                </div>
                             </CardContent>
                         </Card>
                     </div>
@@ -112,7 +136,7 @@ export default function ChatUI() {
                     className="flex-1"
                 />
                 <Button onClick={sendMessage} disabled={!input.trim() || isSending}>
-                    {isSending ? "Thinking..." : "Send"}
+                    {isSending ? "Sending..." : "Send"}
                 </Button>
             </div>
         </section>
