@@ -18,7 +18,7 @@ export default async function TherapyPage({ params }: TherapyPageProps) {
   if (!therapy) return <p>Therapy not found</p>;
 
   const therapyInfo = await (prisma as any).therapy_info.findUnique({
-    where: { therapyid: id },
+    where: { therapy_id: id },
   });
 
   const therapyInfoSafe = therapyInfo || {
