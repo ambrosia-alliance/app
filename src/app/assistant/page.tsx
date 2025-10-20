@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { Children, useEffect, useRef, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import remarkBreaks from "remark-breaks"
 
 type Msg = { id: string; role: "user" | "assistant"; content: string }
 
@@ -98,9 +99,9 @@ export default function ChatUI() {
                             )}
                         >
                             <CardContent className="px-5">
-                                <div className="prose prose-sm dark:prose-invert max-w-none">
+                                <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
                                     <ReactMarkdown
-                                        remarkPlugins={[remarkGfm]}
+                                        remarkPlugins={[remarkGfm, remarkBreaks]}
                                         components={{
                                             a: ({ node, ...props }) => (
                                                 <a
@@ -113,7 +114,53 @@ export default function ChatUI() {
                                             p: ({ node, className, ...props }) => (
                                                 <p
                                                     {...props}
-                                                    className={cn(className, "last:mb-0")}
+                                                    className={cn(
+                                                        className,
+                                                        "whitespace-pre-wrap last:mb-0"
+                                                    )}
+                                                />
+                                            ),
+                                            ul: ({ node, className, children, ...props }) => (
+                                                <ul
+                                                    {...props}
+                                                    className={cn(
+                                                        className,
+                                                        "list-disc pl-5 space-y-1 whitespace-normal"
+                                                    )}
+                                                >
+                                                    {Children.toArray(children).filter(
+                                                        (child) =>
+                                                            !(
+                                                                typeof child === "string" &&
+                                                                child.trim() === ""
+                                                            )
+                                                    )}
+                                                </ul>
+                                            ),
+                                            ol: ({ node, className, children, ...props }) => (
+                                                <ol
+                                                    {...props}
+                                                    className={cn(
+                                                        className,
+                                                        "list-decimal pl-5 space-y-1 whitespace-normal"
+                                                    )}
+                                                >
+                                                    {Children.toArray(children).filter(
+                                                        (child) =>
+                                                            !(
+                                                                typeof child === "string" &&
+                                                                child.trim() === ""
+                                                            )
+                                                    )}
+                                                </ol>
+                                            ),
+                                            li: ({ node, className, ...props }) => (
+                                                <li
+                                                    {...props}
+                                                    className={cn(
+                                                        className,
+                                                        "whitespace-normal"
+                                                    )}
                                                 />
                                             ),
                                         }}
