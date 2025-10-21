@@ -18,7 +18,7 @@ model article {
   content_url             String?
   published_date          DateTime?                @db.Timestamp(6)
   therapy_id              Int
-  status                  Boolean                  @default(false)
+  processed                  Boolean                  @default(false)
   therapy                 therapy                  @relation(fields: [therapy_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   citations               citations[]
   article_details         article_details?
