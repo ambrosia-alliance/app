@@ -1,22 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-
-interface ArticleProps {
-  id: string;
-  title: string;
-  authors?: string | null;
-  published_date?: string | null;
-  source_url: string;
-}
+import { Article } from '../types/index'
 
 interface Props {
-  articles: ArticleProps[];
+  articles: Article[];
 }
 
 export default function ResultsTable({ articles }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 20;
+  const pageSize = 10;
 
   if (!articles || articles.length === 0) {
     return <p className="text-gray-500 italic mt-4">No articles found.</p>;
