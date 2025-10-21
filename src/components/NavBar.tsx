@@ -13,6 +13,13 @@ export default function NavBar() {
           Home
         </Link>
 
+        <Link
+            href="/assistant"
+            className="relative px-3 py-2 text-gray-800 hover:text-blue-600 transition after:absolute after:-bottom-0.5 after:left-0 after:w-0 after:h-[2px] after:bg-blue-600 after:transition-all hover:after:w-full"
+        >
+          Assistant
+        </Link>
+
         {/* About */}
         <Link
           href="/about"
