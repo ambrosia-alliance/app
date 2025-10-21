@@ -18,11 +18,10 @@ model article {
   content_url             String?
   published_date          DateTime?                @db.Timestamp(6)
   therapy_id              Int
-  processed                  Boolean                  @default(false)
+  processed               Boolean                  @default(false)
   therapy                 therapy                  @relation(fields: [therapy_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  citations               citations[]
-  article_details         article_details?
   article_classifications article_classification[]
+  citations               citations[]
 }
 
 model therapy {
@@ -30,30 +29,30 @@ model therapy {
   name                    String
   image_url               String
   description             String
-  created_at               DateTime                 @default(now()) @db.Timestamp(6)
-  updated_at               DateTime                 @default(now()) @db.Timestamp(6)
+  created_at              DateTime                 @default(now()) @db.Timestamp(6)
+  updated_at              DateTime                 @default(now()) @db.Timestamp(6)
   cost_summary            String?
-  cost_currency           String?
   cost_amount             Decimal?                 @db.Decimal(12, 2)
   cost_citation_ids       Json                     @default("[]")
+  num_participants        Int?
   article                 article[]
-  therapy_info            therapy_info?            @relation("TherapyInfoRelation")
-  effects                 effects[]
   article_classifications article_classification[]
+  effects                 effects[]
+  therapy_info            therapy_info?            @relation("TherapyInfoRelation")
 }
 
 model therapy_info {
   therapy_id Int     @id
-  pros      String?
-  cons      String?
-  summary   String?
-  image_url String?
-  therapy   therapy @relation("TherapyInfoRelation", fields: [therapy_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "therapy_info_fk")
+  pros       String?
+  cons       String?
+  summary    String?
+  image_url  String?
+  therapy    therapy @relation("TherapyInfoRelation", fields: [therapy_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "therapy_info_fk")
 }
 
 model citations {
   id         Int     @id @default(autoincrement())
-  quote_text String? @db.Text
+  quote_text String?
   article_id String
   locator    String? @db.VarChar(200)
   article    article @relation(fields: [article_id], references: [id], onDelete: Cascade)
@@ -61,53 +60,39 @@ model citations {
   @@index([article_id])
 }
 
-model article_details {
-  article_id                String   @id
-  design_summary            String?  @db.Text
-  design_citation_ids       Json     @default("[]")
-  participants_total        Int?
-  participants_citation_ids Json     @default("[]")
-  sex_summary               String?  @db.Text
-  sex_citation_ids          Json     @default("[]")
-  age_summary               String?  @db.Text
-  age_citation_ids          Json     @default("[]")
-  created_at                DateTime @default(now()) @db.Timestamp(6)
-  article                   article  @relation(fields: [article_id], references: [id], onDelete: Cascade)
-}
-
 model effects {
-  id                                Int     @id @default(autoincrement())
-  therapy_id                        Int
-  name                              String  @db.VarChar(200)
-  efficacy_extent_summary           String? @db.Text
-  efficacy_extent_citation_ids      Json    @default("[]")
-  efficacy_rate_summary             String? @db.Text
-  efficacy_rate_citation_ids        Json    @default("[]")
-  side_effect_severity_summary      String? @db.Text
-  side_effect_severity_citation_ids Json    @default("[]")
-  side_effect_risk_summary          String? @db.Text
-  side_effect_risk_citation_ids     Json    @default("[]")
-  participants_total                Int?
-  sex_summary                       String? @db.Text
-  age_summary                       String? @db.Text
-  design_summaries                  Json    @default("[]")
-  therapy                           therapy @relation(fields: [therapy_id], references: [id], onDelete: Cascade)
+  id                Int       @id @default(autoincrement())
+  therapy_id        Int
+  name              String    @db.VarChar(200)
+  deprecated        Boolean?  @default(false)
+  deprecated_reason String?
+  category          String?   @db.VarChar(100)
+  summary           String?
+  citation_ids      Json?     @default("[]") @db.Json
+  confidence_score  Float?
+  created_at        DateTime? @default(now()) @db.Timestamp(6)
+  updated_at        DateTime? @default(now()) @db.Timestamp(6)
+  therapy           therapy   @relation(fields: [therapy_id], references: [id], onDelete: Cascade)
 
   @@unique([therapy_id, name])
   @@index([therapy_id])
   @@index([name])
+  @@index([category], map: "idx_effects_category")
+  @@index([confidence_score], map: "idx_effects_confidence")
+  @@index([deprecated], map: "idx_effects_deprecated")
 }
 
 model article_classification {
   id            Int      @id @default(autoincrement())
   article_id    String   @db.VarChar(255)
   therapy_id    Int
-  sentence_text String   @db.Text
+  sentence_text String
   sentence_idx  Int
   category      String   @db.VarChar(100)
   confidence    Float
   model_version String?  @db.VarChar(100)
   processed_at  DateTime @default(now()) @db.Timestamp(6)
+  curated       Boolean? @default(false)
   article       article  @relation(fields: [article_id], references: [id], onDelete: Cascade)
   therapy       therapy  @relation(fields: [therapy_id], references: [id], onDelete: Cascade)
 
@@ -115,13 +100,14 @@ model article_classification {
   @@index([category])
   @@index([therapy_id])
   @@index([confidence])
+  @@index([curated], map: "idx_article_classification_curated")
 }
 
 model processing_log {
   id                    Int       @id @default(autoincrement())
   article_id            String    @db.VarChar(255)
   status                String    @db.VarChar(50)
-  error_message         String?   @db.Text
+  error_message         String?
   sentences_processed   Int?      @default(0)
   classifications_count Int?      @default(0)
   started_at            DateTime  @default(now()) @db.Timestamp(6)
