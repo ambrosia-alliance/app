@@ -19,6 +19,9 @@ export default async function TherapyPage({ params }: TherapyPageProps) {
   const articles: Article[] = await prisma.article.findMany({
     where: { therapy_id: id },
     orderBy: { published_date: 'desc' },
+    include: {
+    citations: true, // 👈 добавляем связанные цитаты
+  },
   }) as unknown as Article[];
 
   const effects: Effect[] = await prisma.effects.findMany({
@@ -47,9 +50,14 @@ export default async function TherapyPage({ params }: TherapyPageProps) {
         <div className="flex-1 md:w-2/3 flex flex-col justify-start">
           <h1 className="text-3xl font-bold mb-4">{therapy.name}</h1>
           <p className="text-lg text-gray-700">{therapy.description}</p>
-        </div>
-      </div>
 
+        </div>
+
+      </div>
+      <div className="flex flex-col gap-2 mt-6">
+        <h1 className="text-3xl font-bold mb-2">Cost summary</h1>
+        <p className="text-lg text-gray-700">{therapy.cost_summary}</p>
+      </div>
       {/* Effects — client-side интерактивный блок */}
       <EffectsSection effects={sanitizedEffects} />
 
