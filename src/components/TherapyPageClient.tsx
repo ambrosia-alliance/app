@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import TherapyCard from '../components/TherapyCard';
 import SearchBar from '../components/SearchBar';
-import { Therapy } from '@prisma/client';
+import { therapy } from '@prisma/client';
 
-interface TherapyWithInfo extends Therapy {
+interface TherapyWithInfo extends therapy {
   therapy_info?: {
     pros?: string;
     cons?: string;

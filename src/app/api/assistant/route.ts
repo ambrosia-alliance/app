@@ -30,6 +30,7 @@ export async function POST(request: Request) {
                 ].join("\n")
             }
         ],
+        // @ts-ignore
         mcp_servers: [
             {
                 type: "url",
@@ -43,7 +44,6 @@ export async function POST(request: Request) {
         },
     });
 
-    console.log(response.content[response.content.length-1].text)
-
+    // @ts-ignore
     return NextResponse.json({ message: response.content[response.content.length-1].text })
 }
