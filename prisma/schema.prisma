@@ -12,16 +12,13 @@ model article {
   title                   String
   abstract                String?
   authors                 String?
-  created_at               DateTime                 @default(now()) @db.Timestamp(6)
+  created_at              DateTime                 @default(now()) @db.Timestamp(6)
   source                  String?
-  source_url               String
-  content_url              String?
-  published_date           DateTime?                @db.Timestamp(6)
-  therapy_id               Int
-  processed               Boolean                  @default(false)
-  journal                 String?                  @db.VarChar(300)
-  year                    Int?
-  doi                     String?                  @db.VarChar(200)
+  source_url              String
+  content_url             String?
+  published_date          DateTime?                @db.Timestamp(6)
+  therapy_id              Int
+  status                  Boolean                  @default(false)
   therapy                 therapy                  @relation(fields: [therapy_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   citations               citations[]
   article_details         article_details?
