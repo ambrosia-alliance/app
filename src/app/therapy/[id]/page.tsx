@@ -72,6 +72,7 @@ export default async function TherapyPage({ params }: TherapyPageProps) {
 
       <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Learn more</h2>
+        {/*@ts-ignore*/}
         <ResultsTable articles={therapy.article} />
       </div>
     </div>

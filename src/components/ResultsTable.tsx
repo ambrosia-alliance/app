@@ -6,8 +6,8 @@ interface ArticleProps {
   id: string;
   title: string;
   authors?: string | null;
-  publisheddate?: string | null;
-  sourceurl: string;
+  published_date?: string | null;
+  source_url: string;
 }
 
 interface Props {
@@ -24,8 +24,8 @@ export default function ResultsTable({ articles }: Props) {
 
   // sorting by date of publication
   const sortedArticles = [...articles].sort((a, b) => {
-    const dateA = a.publisheddate ? new Date(a.publisheddate).getTime() : 0;
-    const dateB = b.publisheddate ? new Date(b.publisheddate).getTime() : 0;
+    const dateA = a.published_date ? new Date(a.published_date).getTime() : 0;
+    const dateB = b.published_date ? new Date(b.published_date).getTime() : 0;
     return dateB - dateA;
   });
 
@@ -64,7 +64,7 @@ export default function ResultsTable({ articles }: Props) {
               >
                 <td className="p-3 border-b">
                   <a
-                    href={a.sourceurl}
+                    href={a.source_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:underline font-medium"
@@ -73,7 +73,7 @@ export default function ResultsTable({ articles }: Props) {
                   </a>
                 </td>
                 <td className="p-3 border-b">{a.authors || '—'}</td>
-                <td className="p-3 border-b">{formatDate(a.publisheddate)}</td>
+                <td className="p-3 border-b">{formatDate(a.published_date)}</td>
               </tr>
             ))}
           </tbody>
