@@ -8,7 +8,7 @@ export interface Article {
   source?: string;
   source_url: string;
   content_url?: string;
-  published_date?: Date;
+  published_date?: string;
   therapy_id: number;
   processed: boolean;
   therapy?: Therapy;
