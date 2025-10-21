@@ -12,30 +12,30 @@ model article {
   title         String
   abstract      String?
   authors       String?
-  createdat     DateTime  @default(now()) @db.Timestamp(6)
+  created_at     DateTime  @default(now()) @db.Timestamp(6)
   source        String?
-  sourceurl     String
-  contenturl    String?
-  publisheddate DateTime? @db.Timestamp(6)
-  therapyid     Int
+  source_url     String
+  content_url    String?
+  published_date DateTime? @db.Timestamp(6)
+  therapy_id     Int
   processed     Boolean   @default(false)
-  therapy       therapy   @relation(fields: [therapyid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  therapy       therapy   @relation(fields: [therapy_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model therapy {
   id           Int           @id @default(autoincrement())
   name         String
-  createdat    DateTime      @default(now()) @db.Timestamp(6)
-  updatedat    DateTime      @default(now()) @db.Timestamp(6)
+  created_at    DateTime      @default(now()) @db.Timestamp(6)
+  updated_at    DateTime      @default(now()) @db.Timestamp(6)
   article      article[]
   therapy_info therapy_info? @relation("TherapyInfoRelation")
 }
 
 model therapy_info {
-  therapyid Int     @id
+  therapy_id Int     @id
   pros      String?
   cons      String?
   summary   String?
   image_url String?
-  therapy   therapy @relation("TherapyInfoRelation", fields: [therapyid], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "therapy_info_fk")
+  therapy   therapy @relation("TherapyInfoRelation", fields: [therapy_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "therapy_info_fk")
 }
