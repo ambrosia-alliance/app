@@ -183,7 +183,7 @@ export default function ChatUI() {
                     className="flex-1"
                 />
                 <Button onClick={sendMessage} disabled={!input.trim() || isSending}>
-                    {isSending ? "Sending..." : "Send"}
+                    {isSending ? "Thinking..." : "Send"}
                 </Button>
             </div>
         </section>
