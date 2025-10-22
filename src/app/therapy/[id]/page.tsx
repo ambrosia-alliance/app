@@ -1,18 +1,46 @@
 import { prisma } from '@/lib/prisma';
 import ResultsTable from '@/components/ResultsTable';
 import EffectsSection from '@/components/EffectsSection';
-import { Article, Effect } from '@/types';
+import { Article, Effect, Citation } from '@/types';
 
 interface TherapyPageProps {
   params: { id: string };
 }
 
 export default async function TherapyPage({ params }: TherapyPageProps) {
-  const id = parseInt(params.id, 10);
+  const resolvedParams = await params;
+  const id = parseInt(resolvedParams.id, 10);
 
   const therapy = await prisma.therapy.findUnique({
     where: { id },
   });
+
+  const rawCitations = await prisma.citations.findMany({
+    where: { article: { therapy_id: id } },
+    include: { article: true },
+  });
+
+  const citations = rawCitations.map(c => ({
+    id: c.id,
+    quote_text: c.quote_text ?? undefined,
+    article_id: c.article_id,
+    locator: c.locator ?? undefined,
+    article: c.article
+      ? {
+          id: c.article.id,
+          title: c.article.title,
+          abstract: c.article.abstract ?? undefined,
+          authors: c.article.authors ?? undefined,
+          created_at: c.article.created_at,
+          source: c.article.source ?? undefined,
+          source_url: c.article.source_url,
+          content_url: c.article.content_url ?? undefined,
+          published_date: c.article.published_date ?? undefined,
+          therapy_id: c.article.therapy_id,
+          processed: c.article.processed,
+        }
+      : undefined,
+  })) as unknown as Citation[];
 
   if (!therapy) return <p>Therapy not found</p>;
 
@@ -54,12 +82,14 @@ export default async function TherapyPage({ params }: TherapyPageProps) {
         </div>
 
       </div>
+      {therapy.cost_summary && (
       <div className="flex flex-col gap-2 mt-6">
         <h1 className="text-3xl font-bold mb-2">Cost summary</h1>
         <p className="text-lg text-gray-700">{therapy.cost_summary}</p>
       </div>
+      )}
       {/* Effects — client-side интерактивный блок */}
-      <EffectsSection effects={sanitizedEffects} />
+      <EffectsSection effects={sanitizedEffects} citations={citations}/>
 
       {/* Table */}
       <div className="mt-8">

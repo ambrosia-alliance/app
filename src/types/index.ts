@@ -2,13 +2,13 @@
 export interface Article {
   id: string;
   title: string;
-  abstract?: string;
-  authors?: string;
+  abstract?: string | null;
+  authors?: string | null;
   created_at: Date;
-  source?: string;
+  source?: string | null;
   source_url: string;
-  content_url?: string;
-  published_date?: string;
+  content_url?: string | null;
+  published_date?: string | null;
   therapy_id: number;
   processed: boolean;
   therapy?: Therapy;
@@ -47,9 +47,9 @@ export interface TherapyInfo {
 // === CITATION ===
 export interface Citation {
   id: number;
-  quote_text?: string;
+  quote_text?: string | null;
   article_id: string;
-  locator?: string;
+  locator?: string| null;
   article?: Article;
 }
 
