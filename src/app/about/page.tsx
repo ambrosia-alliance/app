@@ -2,11 +2,10 @@ import Image from 'next/image';
 
 export default function AboutPage() {
   const team = [
-    { name: 'Lybov', role: 'Manager', photo: '/images/team/no_foto.jpg' },
-    { name: 'Ian', role: 'Developer', photo: '/images/team/no_foto.jpg' },
-    { name: 'Andrew', role: 'Developer', photo: '/images/team/no_foto.jpg' },
-    { name: 'Igor', role: 'Developer', photo: '/images/team/no_foto.jpg' },
-    { name: 'Wisdom', role: 'Developer', photo: '/images/team/no_foto.jpg' },
+    { name: 'Liubov', role: 'Manager', photo: '/images/team/liubov.jpg' },
+    { name: 'Ian', role: 'Developer', photo: '/images/team/ian.jpg' },
+    { name: 'Andrew', role: 'Developer', photo: '/images/team/andrew.jpg' },
+    { name: 'Igor', role: 'Developer', photo: '/images/team/igor.jpg' },
   ];
 
   return (
