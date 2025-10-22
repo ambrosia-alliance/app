@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import ResultsTable from '@/components/ResultsTable';
 import EffectsSection from '@/components/EffectsSection';
+import CostSummary from '@/components/CostSummary';
 import { Article, Effect, Citation } from '@/types';
 
 interface TherapyPageProps {
@@ -83,10 +84,11 @@ export default async function TherapyPage({ params }: TherapyPageProps) {
 
       </div>
       {therapy.cost_summary && (
-      <div className="flex flex-col gap-2 mt-6">
-        <h1 className="text-3xl font-bold mb-2">Cost summary</h1>
-        <p className="text-lg text-gray-700">{therapy.cost_summary}</p>
-      </div>
+        <CostSummary
+          costSummary={therapy.cost_summary}
+          costCitationIds={Array.isArray(therapy.cost_citation_ids) ? therapy.cost_citation_ids as number[] : []}
+          allCitations={citations}
+        />
       )}
       {/* Effects — client-side интерактивный блок */}
       <EffectsSection effects={sanitizedEffects} citations={citations}/>
