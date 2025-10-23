@@ -10,11 +10,10 @@ export default function Header() {
       <div className="max-w-6xl flex items-center p-6 mx-auto">
         <Link href="/" className="flex items-center space-x-2">
           <img
-            src="/images/logo.png"
+            src="/images/brand_name_and_logo.webp"
             alt="Ambrosia Logo"
-            className="h-10 w-10 object-contain"
+            className="h-20 w-50 object-contain"
           />
-          <span className="text-2xl font-bold text-gray-800">Ambrosia</span>
         </Link>
       </div>
 
